@@ -1,0 +1,71 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "edge-gateway"
+version = "0.1.0"
+description = "EDGE industrial RS-485/Modbus gateway"
+readme = "README.md"
+requires-python = ">=3.10"
+authors = [
+  { name = "EDGE Full-Stack RS485 Team" }
+]
+license = { text = "Proprietary" }
+dependencies = [
+  "fastapi==0.104.1",
+  "uvicorn[standard]==0.24.0",
+  "aiohttp>=3.9.0",
+  "flask==2.3.0",
+  "flask-cors==4.0.0",
+  "aiosqlite>=0.19.0",
+  "pydantic==2.5.0",
+  "streamlit>=1.28.0",
+  "streamlit-autorefresh>=0.1.0",
+  "qrcode>=7.4.2",
+  "pymodbus>=3.5.0",
+  "pyserial>=3.5",
+  "crcmod>=1.7",
+  "python-telegram-bot==20.7",
+  "pyyaml>=6.0.1",
+  "python-dotenv>=1.0.0",
+  "python-multipart==0.0.20",
+  "cryptography>=41.0.0",
+  "urllib3>=2.0.0",
+  "structlog>=23.2.0",
+  "prometheus-client>=0.19.0",
+  "websockets==15.0.1",
+  "paho-mqtt>=1.6.0",
+  "slowapi==0.1.9",
+  "jinja2==3.1.6",
+  "psutil==5.9.0",
+  "plotly>=5.17.0",
+  "pandas>=2.1.0",
+  "scapy>=2.5.0",
+  "geoip2>=4.7.0",
+  "requests>=2.31.0"
+]
+
+[project.optional-dependencies]
+dashboard = ["streamlit>=1.28.0", "plotly>=5.17.0"]
+telegram = ["python-telegram-bot==20.7"]
+
+[project.urls]
+Repository = "https://github.com/example/edge-gateway"
+
+[project.scripts]
+edge = "start:cli"
+
+[tool.setuptools]
+py-modules = ["start", "start_edge", "start_dashboard"]
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = [
+  "core*",
+  "modbus*",
+  "web_dashboard*",
+  "monitoring*",
+  "tunnel_system*",
+  "tools*"
+]
