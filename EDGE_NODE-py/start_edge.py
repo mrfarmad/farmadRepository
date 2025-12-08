@@ -7,7 +7,7 @@ import os
 import signal
 import sys
 from pathlib import Path
-from typing import Any, List, Tuple
+from typing import Any
 
 import yaml
 
@@ -43,7 +43,7 @@ except Exception:  # pragma: no cover - optional
     FramerType = None  # type: ignore
 
 
-def build_start_command(args: argparse.Namespace) -> List[str]:
+def build_start_command(args: argparse.Namespace) -> list[str]:
     """Compose command line for start.py based on arguments."""
     cmd = [sys.executable, "start.py"]
 
@@ -74,7 +74,7 @@ async def stream_output(prefix: str, stream: asyncio.StreamReader):
         print(f"[{prefix}] {line.decode().rstrip()}", flush=True)
 
 
-async def start_process(name: str, cmd: List[str]) -> asyncio.subprocess.Process:
+async def start_process(name: str, cmd: list[str]) -> asyncio.subprocess.Process:
     """Start subprocess with prefixed output."""
     proc = await asyncio.create_subprocess_exec(
         *cmd,
@@ -87,7 +87,7 @@ async def start_process(name: str, cmd: List[str]) -> asyncio.subprocess.Process
     return proc
 
 
-def read_config_defaults() -> Tuple[str, int]:
+def read_config_defaults() -> tuple[str, int]:
     cfg_path = CONFIG_DIR / "app_config.yaml"
     if cfg_path.exists():
         with open(cfg_path, "r", encoding="utf-8") as f:
