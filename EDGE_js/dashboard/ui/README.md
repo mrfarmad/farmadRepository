@@ -4,7 +4,14 @@
 
 ## Требования
 - Node.js 18+
-- Доступ к health API (`http://localhost:8090/health`) и WebSocket стриму (`ws://localhost:8000`), которые поднимает backend `EDGE_js`.
+- Доступ к health API (`http://localhost:8090/health` по умолчанию) и WebSocket стриму (`ws://localhost:8000`), которые поднимает backend `EDGE_js`.
+
+## Переменные окружения
+Vite поддерживает `VITE_` переменные. Для смены эндпоинтов создайте `.env.local` рядом с `package.json`:
+```
+VITE_HEALTH_URL=http://localhost:8090/health
+VITE_WS_URL=ws://localhost:8000
+```
 
 ## Установка и запуск (dev)
 ```bash
@@ -21,5 +28,5 @@ npm run preview # локальная проверка собранной вер�
 ```
 
 ## Настройки
-- Порты и хосты health/WebSocket можно поменять в `services/api.js` и `services/websocket.js`.
 - Tailwind и PostCSS настроены в `tailwind.config.js` и `postcss.config.cjs`.
+- Фильтры по зоне/типу и поиск доступны из панели фильтров, данные приходят через WebSocket.

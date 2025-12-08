@@ -13,10 +13,15 @@ const initialDeviceState = {
   metrics: [],
 };
 
+const deviceTypes = ['all', 'kub', 'vfd', 'sensor'];
+
 export default function App() {
   const [health, setHealth] = useState({ status: 'unknown', timestamp: null });
   const [data, setData] = useState(initialDeviceState);
   const [connectionStatus, setConnectionStatus] = useState('connecting');
+  const [zoneFilter, setZoneFilter] = useState('all');
+  const [typeFilter, setTypeFilter] = useState('all');
+  const [search, setSearch] = useState('');
 
   useEffect(() => {
     fetchHealth()
@@ -45,26 +50,40 @@ export default function App() {
   }, []);
 
   const zones = useMemo(() => aggregateZones(data.devices), [data.devices]);
+  const filteredDevices = useMemo(() => applyFilters(data.devices, { zoneFilter, typeFilter, search }), [data.devices, zoneFilter, typeFilter, search]);
 
   return (
     <div className="min-h-screen bg-slate-950 text-slate-100 flex font-sans">
       <Sidebar zones={zones} connectionStatus={connectionStatus} />
       <main className="flex-1 p-6 space-y-6 overflow-auto">
-        <header className="flex items-center justify-between">
+        <header className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
           <div>
             <h1 className="text-2xl font-semibold">EDGE Device Dashboard</h1>
             <p className="text-sm text-slate-400">Real-time Modbus telemetry and health</p>
           </div>
-          <HealthPanel health={health} />
+          <div className="flex flex-wrap gap-3 items-center">
+            <FilterSelect label="Зона" value={zoneFilter} onChange={setZoneFilter} options={['all', ...zones.map((z) => z.zone)]} />
+            <FilterSelect label="Тип" value={typeFilter} onChange={setTypeFilter} options={deviceTypes} />
+            <label className="text-xs text-slate-400 flex items-center gap-2">
+              <span>Поиск</span>
+              <input
+                className="bg-slate-900 border border-slate-700 rounded px-2 py-1 text-sm focus:outline-none focus:ring focus:ring-sky-500"
+                placeholder="имя или ID"
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+              />
+            </label>
+            <HealthPanel health={health} />
+          </div>
         </header>
 
         <section className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          {data.devices.map((device) => (
+          {filteredDevices.map((device) => (
             <DeviceCard key={device.id} device={device} />
           ))}
-          {data.devices.length === 0 && (
+          {filteredDevices.length === 0 && (
             <div className="col-span-full text-sm text-slate-400 border border-dashed border-slate-700 rounded-lg p-4">
-              Waiting for device telemetry from WebSocket stream...
+              Нет устройств под выбранные фильтры или нет телеметрии из WebSocket.
             </div>
           )}
         </section>
@@ -80,6 +99,17 @@ export default function App() {
       </main>
     </div>
   );
+}
+
+function applyFilters(devices, { zoneFilter, typeFilter, search }) {
+  return devices
+    .filter((d) => zoneFilter === 'all' || d.zone === zoneFilter)
+    .filter((d) => typeFilter === 'all' || (d.type || '').toLowerCase() === typeFilter)
+    .filter((d) => {
+      if (!search.trim()) return true;
+      const needle = search.toLowerCase();
+      return `${d.name ?? ''}`.toLowerCase().includes(needle) || `${d.id}`.includes(needle);
+    });
 }
 
 function mergeDevices(current, incoming) {
@@ -116,4 +146,23 @@ function average(values) {
   if (!values.length) return null;
   const sum = values.reduce((acc, val) => acc + val, 0);
   return Math.round((sum / values.length) * 10) / 10;
+}
+
+function FilterSelect({ label, value, onChange, options }) {
+  return (
+    <label className="text-xs text-slate-400 flex items-center gap-2">
+      <span>{label}</span>
+      <select
+        className="bg-slate-900 border border-slate-700 rounded px-2 py-1 text-sm focus:outline-none focus:ring focus:ring-sky-500"
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
+      >
+        {options.map((opt) => (
+          <option key={opt} value={opt}>
+            {opt}
+          </option>
+        ))}
+      </select>
+    </label>
+  );
 }
