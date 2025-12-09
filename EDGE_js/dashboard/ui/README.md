@@ -6,6 +6,13 @@
 - Node.js 18+
 - Доступ к health API (`http://localhost:8090/health` по умолчанию) и WebSocket стриму (`ws://localhost:8000`), которые поднимает backend `EDGE_js`.
 
+### Быстрый старт из корня проекта
+Из директории `EDGE_js` можно запустить Vite dev-сервер через обертку `start-dashboard.js` (аналог Python `start_dashboard.py`):
+```bash
+npm run start:dashboard -- --port 8501 --host 0.0.0.0 --health http://localhost:8090/health --ws ws://localhost:8000
+```
+Если аргументы опущены, по умолчанию используется `port=8501`, `health=http://localhost:8090/health`, `ws=ws://localhost:8000`.
+
 ## Переменные окружения
 Vite поддерживает `VITE_` переменные. Для смены эндпоинтов создайте `.env.local` рядом с `package.json`:
 ```

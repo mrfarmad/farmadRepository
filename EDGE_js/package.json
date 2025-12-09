@@ -6,6 +6,7 @@
   "type": "commonjs",
   "scripts": {
     "start": "node start.js",
+    "start:dashboard": "node start-dashboard.js",
     "lint": "echo 'lint not configured'",
     "test": "echo 'tests not implemented'"
   },

@@ -40,6 +40,15 @@ EDGE_js/
 ## Дашборд (React SPA)
 Директория `dashboard/ui` использует Vite + Tailwind.
 
+### Быстрый запуск через стартовый скрипт
+```bash
+cd EDGE_js
+npm run start:dashboard                # dev-сервер Vite на порту 8501
+# или указать хост/порт и endpoints
+npm run start:dashboard -- --port 8501 --host 0.0.0.0 --health http://localhost:8090/health --ws ws://localhost:8000
+```
+Скрипт `start-dashboard.js` заменяет Python `start_dashboard.py`: проверяет наличие UI, пробрасывает `VITE_HEALTH_URL` и `VITE_WS_URL` в Vite и показывает итоговый URL.
+
 ### Установка и dev-режим
 ```bash
 cd dashboard/ui
