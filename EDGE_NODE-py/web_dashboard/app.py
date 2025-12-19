@@ -6,6 +6,7 @@ description: Операторский Streamlit-дашборд для наблю
 
 from __future__ import annotations
 
+import asyncio
 import json
 import logging
 import os
@@ -33,6 +34,11 @@ try:  # streamlit_autorefresh входит в стандартный дистр�
     from streamlit_autorefresh import st_autorefresh
 except ImportError:  # pragma: no cover - фоллбек, если компонент не установлен
     st_autorefresh = None
+
+try:  # optional websocket client for live telemetry
+    import websockets
+except Exception:  # pragma: no cover - отсутствие клиента не критично
+    websockets = None
 
 # Добавляем корень репозитория в PYTHONPATH
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -181,6 +187,47 @@ def _generate_qr_image(link: str) -> Optional[bytes]:
     buffer = BytesIO()
     img.save(buffer, format="PNG")
     return buffer.getvalue()
+
+
+def _websocket_config() -> tuple[bool, str, int]:
+    """Извлекает конфигурацию WebSocket сервера из конфигов."""
+
+    cfg = get_config()
+    services = getattr(cfg, "services", None)
+    enabled = bool(getattr(services, "websocket_enabled", False))
+    host = getattr(services, "websocket_host", "localhost") or "localhost"
+    port = int(getattr(services, "websocket_port", getattr(cfg, "websocket_port", 8765)) or 8765)
+    return enabled, host, port
+
+
+def fetch_websocket_snapshot(timeout: float = 3.0) -> tuple[Optional[Dict[str, Any]], str]:
+    """Пытается получить срез телеметрии через WebSocket.
+
+    Возвращает кортеж (payload, status_message). Payload = None, если подключение
+    невозможно или отключено в конфигурации.
+    """
+
+    enabled, host, port = _websocket_config()
+    if not enabled:
+        return None, "WebSocket отключен в конфигурации"
+
+    if websockets is None:
+        return None, "Модуль websockets не установлен"
+
+    uri = f"ws://{host}:{port}"
+
+    async def _fetch() -> Dict[str, Any]:
+        async with websockets.connect(uri, open_timeout=timeout) as websocket:
+            await websocket.send(json.dumps({"cmd": "get"}))
+            message = await asyncio.wait_for(websocket.recv(), timeout=timeout)
+            return json.loads(message)
+
+    try:
+        payload = asyncio.run(_fetch())
+        return payload, uri
+    except Exception as exc:  # pragma: no cover - сетевые ошибки
+        logger.warning("Не удалось получить данные WebSocket: %s", exc)
+        return None, f"Ошибка подключения ({uri}): {exc}"
 
 
 def _sanitize_preferences_payload(data: Optional[Dict[str, Any]]) -> Dict[str, Any]:
@@ -1090,6 +1137,75 @@ def render_devices_tab(registry: DeviceRegistry, device_payloads: Dict[int, Dict
 
     payload = device_payloads.get(selected_id) or {}
     render_device_detail_panel(selected_device, payload)
+
+
+def render_visualization_tab(
+    rooms: List[RoomSnapshot],
+    registry: DeviceRegistry,
+    device_payloads: Dict[int, Dict[str, Any]],
+) -> None:
+    """Вкладка визуализации (адаптация mvp-visual из JS приложения).
+
+    Использует WebSocket для получения среза данных в реальном времени, а также
+    текущие данные из Device Registry в качестве резервного источника.
+    """
+
+    ws_payload, ws_status = fetch_websocket_snapshot()
+
+    st.subheader("🛰️ Визуализация (MVP)")
+    status_col, mode_col = st.columns([2, 1])
+    with status_col:
+        if ws_payload:
+            st.success(f"Получены потоковые данные из {ws_status}")
+        else:
+            st.warning(f"Потоковые данные недоступны: {ws_status}")
+    with mode_col:
+        st.caption("Источник данных: WebSocket → Device Registry")
+
+    if ws_payload:
+        summary_cols = st.columns(3)
+        summary_cols[0].metric("Температура", ws_payload.get("temp_inside"), "°C")
+        summary_cols[1].metric("Влажность", ws_payload.get("humidity"), "%")
+        summary_cols[2].metric("Давление", ws_payload.get("pressure"), "Pa")
+
+    st.markdown("---")
+    st.markdown("#### Частотные преобразователи и тревоги")
+
+    rows: List[Dict[str, Any]] = []
+    for room in rooms:
+        statuses = getattr(room, "device_statuses", {})
+        for device in room.devices:
+            payload = device_payloads.get(device.device_id, {})
+            status = statuses.get(device.device_id)
+            alarms_total = payload.get("active_alarms_total") or len(getattr(status, "alarms", []) or [])
+            warnings_total = payload.get("active_warnings_total") or len(getattr(status, "warnings", []) or [])
+            running_freq = payload.get("running_frequency") or payload.get("set_frequency")
+            connection = payload.get("connection_status") or getattr(status, "status", "—")
+
+            rows.append(
+                {
+                    "Помещение": room.room,
+                    "Устройство": device.name,
+                    "Тип": device.device_type.value,
+                    "Частота, Гц": running_freq,
+                    "Статус": connection,
+                    "Аварии": alarms_total,
+                    "Предупр": warnings_total,
+                }
+            )
+
+    if rows:
+        st.dataframe(pd.DataFrame(rows), use_container_width=True)
+    else:
+        st.info("Нет устройств для отображения")
+
+    st.markdown("---")
+    st.markdown("#### Сырые данные потока")
+    if ws_payload:
+        st.json(ws_payload)
+    else:
+        st.caption("WebSocket поток недоступен — отображаются данные последнего опроса")
+        st.json(device_payloads)
 
 
 def build_overview(rooms: List[RoomSnapshot], device_payloads: Dict[int, Dict[str, Any]]) -> FarmOverview:
@@ -2136,25 +2252,34 @@ def main() -> None:
             key="edge_dashboard_autorefresh",
         )
 
-    tab_titles = ["Дашборд", "Устройства", "Графики", "Аварии"] + (["Конфигурация", "Пользователи"] if is_admin else [])
+    tab_titles = [
+        "Дашборд",
+        "Визуализация",
+        "Устройства",
+        "Графики",
+        "Аварии",
+    ] + (["Конфигурация", "Пользователи"] if is_admin else [])
     tabs = st.tabs(tab_titles)
 
     with tabs[0]:
         render_dashboard_tab(rooms, device_payloads, selected_room)
 
     with tabs[1]:
-        render_devices_tab(registry, device_payloads)
+        render_visualization_tab(rooms, registry, device_payloads)
 
     with tabs[2]:
-        render_charts_tab(rooms)
+        render_devices_tab(registry, device_payloads)
 
     with tabs[3]:
+        render_charts_tab(rooms)
+
+    with tabs[4]:
         render_alarms_tab(rooms)
 
-    if is_admin and len(tabs) > 4:
-        with tabs[4]:
-            render_configuration_tab(registry)
+    if is_admin and len(tabs) > 5:
         with tabs[5]:
+            render_configuration_tab(registry)
+        with tabs[6]:
             render_user_management_panel()
 
 
