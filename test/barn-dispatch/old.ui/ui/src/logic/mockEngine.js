@@ -1,0 +1,1 @@
+export function generateInitialState(){return []};

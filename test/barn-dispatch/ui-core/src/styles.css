@@ -1,0 +1,280 @@
+:root {
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    color-scheme: dark;
+    background-color: #0b1120;
+    color: #e5e7eb;
+  }
+  
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+  }
+  
+  body {
+    margin: 0;
+  }
+  
+  .app-root {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    background: radial-gradient(circle at top, #1f2937 0, #020617 55%);
+  }
+  
+  .app-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 18px;
+    border-bottom: 1px solid rgba(148, 163, 184, 0.4);
+    backdrop-filter: blur(6px);
+    background: linear-gradient(to right, rgba(15, 23, 42, 0.9), rgba(15, 23, 42, 0.6));
+  }
+  
+  .app-title {
+    font-size: 18px;
+    font-weight: 600;
+  }
+  
+  .app-subtitle {
+    font-size: 12px;
+    color: #9ca3af;
+  }
+  
+  .app-layout {
+    flex: 1;
+    display: grid;
+    grid-template-columns: 260px 1.3fr 1.2fr;
+    gap: 10px;
+    padding: 10px;
+  }
+  
+  /* панели */
+  
+  .panel {
+    background: rgba(15, 23, 42, 0.9);
+    border-radius: 10px;
+    border: 1px solid rgba(31, 41, 55, 1);
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+  }
+  
+  .panel-title {
+    font-size: 13px;
+    font-weight: 600;
+    margin-bottom: 6px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .panel-title span {
+    font-size: 11px;
+    color: #9ca3af;
+  }
+  
+  /* список контроллеров */
+  
+  .controller-list {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    overflow-y: auto;
+    padding-right: 4px;
+  }
+  
+  .controller-item {
+    border-radius: 8px;
+    padding: 8px 9px;
+    border: 1px solid rgba(31, 41, 55, 1);
+    background: linear-gradient(135deg, #020617, #020617);
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .controller-item:hover {
+    border-color: #4b5563;
+  }
+  
+  .controller-item.active {
+    border-color: #22c55e;
+    background: radial-gradient(circle at top left, rgba(34, 197, 94, 0.18), #020617);
+  }
+  
+  .controller-item-main {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .controller-name {
+    font-size: 13px;
+    font-weight: 500;
+  }
+  
+  .controller-code {
+    font-size: 11px;
+    color: #9ca3af;
+  }
+  
+  .controller-badge {
+    font-size: 10px;
+    padding: 2px 6px;
+    border-radius: 999px;
+    border: 1px solid rgba(55, 65, 81, 1);
+  }
+  
+  /* статус контроллера */
+  
+  .status-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 6px;
+    margin-top: 6px;
+  }
+  
+  .status-chip {
+    border-radius: 8px;
+    border: 1px solid rgba(31, 41, 55, 1);
+    padding: 7px 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+    font-size: 11px;
+  }
+  
+  .status-chip-label {
+    color: #9ca3af;
+  }
+  
+  .status-chip-value {
+    font-weight: 500;
+  }
+  
+  .status-chip.bad {
+    border-color: #f97316;
+  }
+  
+  .status-chip.error {
+    border-color: #ef4444;
+  }
+  
+  /* настройка контроллера */
+  
+  .form-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 6px;
+  }
+  
+  .form-field {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+  }
+  
+  .form-label {
+    font-size: 11px;
+    color: #9ca3af;
+  }
+  
+  .form-input,
+  .form-select {
+    border-radius: 7px;
+    border: 1px solid rgba(31, 41, 55, 1);
+    background: #020617;
+    color: #e5e7eb;
+    font-size: 12px;
+    padding: 5px 7px;
+    outline: none;
+  }
+  
+  .form-input:focus,
+  .form-select:focus {
+    border-color: #22c55e;
+  }
+  
+  /* нижний блок в настройках */
+  
+  .settings-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 8px;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+  
+  .badge {
+    font-size: 10px;
+    padding: 3px 7px;
+    border-radius: 999px;
+    border: 1px solid rgba(55, 65, 81, 1);
+    color: #9ca3af;
+  }
+  
+  /* кнопки */
+  
+  .btn {
+    font-size: 12px;
+    padding: 6px 10px;
+    border-radius: 7px;
+    border: 1px solid rgba(55, 65, 81, 1);
+    background: #020617;
+    color: #e5e7eb;
+    cursor: pointer;
+  }
+  
+  .btn-primary {
+    border-color: #22c55e;
+    background: linear-gradient(135deg, #16a34a, #22c55e);
+    color: #022c22;
+    font-weight: 500;
+  }
+  
+  .btn-sm {
+    font-size: 11px;
+    padding: 4px 7px;
+  }
+  
+  /* live-параметры (заглушка) */
+  
+  .live-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 6px;
+    margin-top: 6px;
+  }
+  
+  .live-chip {
+    border-radius: 8px;
+    border: 1px solid rgba(31, 41, 55, 1);
+    padding: 6px 8px;
+    font-size: 11px;
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+  }
+  
+  .live-chip span:nth-child(1) {
+    color: #9ca3af;
+  }
+  
+  .live-chip span:nth-child(2) {
+    font-weight: 500;
+  }
+  
+  /* верхняя строка в панелях */
+  
+  .panel-header-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 6px;
+    font-size: 11px;
+  }
+  

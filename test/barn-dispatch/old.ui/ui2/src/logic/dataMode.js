@@ -1,0 +1,1 @@
+export const MODE={MOCK:'mock',SERVER:'server'};export const DISPLAY_UPDATE_MS=5000;

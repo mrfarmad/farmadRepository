@@ -1,0 +1,35 @@
+{
+  "name": "edge-js",
+  "version": "0.1.0",
+  "description": "Node.js port of EDGE industrial IoT stack",
+  "main": "start.js",
+  "type": "commonjs",
+  "scripts": {
+    "start": "node start.js",
+    "start:dashboard": "node start-dashboard.js",
+    "dev:backend": "node start.js",
+    "dev:dashboard": "npm --prefix dashboard/ui run dev",
+    "dev": "concurrently \"npm run dev:backend\" \"npm run dev:dashboard\"",
+    "test:fullstack": "node tools/fullstack-smoke-test.js",
+    "lint": "echo 'lint not configured'",
+    "test": "echo 'tests not implemented'"
+  },
+  "dependencies": {
+    "better-sqlite3": "^9.0.0",
+    "commander": "^12.1.0",
+    "crc": "^4.3.2",
+    "dotenv": "^16.4.5",
+    "fastify": "^4.27.2",
+    "js-yaml": "^4.1.0",
+    "mqtt": "^5.3.4",
+    "node-pty": "^1.0.0",
+    "node-telegram-bot-api": "^0.64.0",
+    "serialport": "^12.0.0",
+    "ws": "^8.17.0",
+    "zod": "^3.23.8"
+  },
+  "devDependencies": {
+    "concurrently": "^9.1.0",
+    "wait-on": "^8.0.2"
+  }
+}
