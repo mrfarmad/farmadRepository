@@ -609,9 +609,16 @@ class ConfigManager:
         """Валидация конфигурации"""
         errors = []
 
-        # Проверка Telegram токена
+        # Проверка Telegram токена (только если Telegram включен)
         if self.telegram.token is None:
-            errors.append("❌ Не найден TELEGRAM_BOT_TOKEN")
+            if getattr(self.services, "telegram_enabled", True):
+                logger.warning(
+                    "⚠️ TELEGRAM_BOT_TOKEN не найден — Telegram бот будет отключен."
+                )
+            else:
+                logger.info(
+                    "ℹ️ TELEGRAM_BOT_TOKEN не найден, но Telegram отключен в конфигурации."
+                )
 
         # Проверка портов
         if not (1024 <= self.modbus_tcp.port <= 65535):
