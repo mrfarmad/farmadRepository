@@ -1,0 +1,198 @@
+{
+  "rooms": {
+    "Птичник-1": {
+      "1": [
+        "co2",
+        "humidity",
+        "temp_inside",
+        "temp_target",
+        "ventilation_level",
+        "ventilation_target"
+      ],
+      "2": [
+        "igbt_temperature",
+        "motor_temperature",
+        "output_current",
+        "output_power",
+        "output_voltage",
+        "running_frequency",
+        "running_speed",
+        "running_state",
+        "set_frequency"
+      ],
+      "3": [
+        "device_id",
+        "device_name",
+        "device_type",
+        "flame_level",
+        "flame_present",
+        "min_work_time",
+        "operation_mode",
+        "pressure",
+        "purge_duration",
+        "start_delay",
+        "temp_inside",
+        "temp_target"
+      ]
+    },
+    "Птичник-2": {
+      "3": [
+        "pressure",
+        "temp_inside",
+        "temp_target"
+      ]
+    },
+    "Птичник-3": {
+      "4": [
+        "pressure",
+        "temp_inside",
+        "temp_target"
+      ]
+    },
+    "Без помещения": {
+      "1": [
+        "temp_inside",
+        "ventilation_target"
+      ]
+    },
+    "Птичник 1": {
+      "1": [
+        "day_counter",
+        "humidity",
+        "temp_inside",
+        "temp_target",
+        "ventilation_level",
+        "ventilation_target"
+      ],
+      "2": [
+        "co2",
+        "humidity",
+        "pressure",
+        "temp_inside",
+        "temp_target",
+        "ventilation_level",
+        "ventilation_target"
+      ],
+      "3": [
+        "output_current",
+        "output_power",
+        "running_frequency",
+        "running_state",
+        "set_frequency"
+      ],
+      "4": [
+        "temp_inside",
+        "humidity",
+        "co2",
+        "pressure"
+      ]
+    },
+    "Помещение 1": {
+      "1": [
+        "device_number",
+        "digital_outputs_1",
+        "digital_outputs_2",
+        "digital_outputs_3",
+        "factory_number",
+        "software_version"
+      ],
+      "2": [
+        "flame_level",
+        "flame_present",
+        "min_work_time",
+        "purge_duration",
+        "software_version",
+        "start_delay"
+      ],
+      "3": [
+        "output_voltage",
+        "running_frequency",
+        "running_speed",
+        "running_state",
+        "set_frequency"
+      ],
+      "4": [
+        "remaining_run_time"
+      ]
+    },
+    "пт-1": {
+      "1": [
+        "device_number",
+        "digital_outputs_1",
+        "digital_outputs_2",
+        "digital_outputs_3",
+        "factory_number",
+        "software_version"
+      ],
+      "2": [
+        "flame_level",
+        "flame_present",
+        "min_work_time",
+        "purge_duration",
+        "software_version",
+        "start_delay"
+      ],
+      "3": [
+        "output_voltage",
+        "running_frequency",
+        "running_speed",
+        "running_state",
+        "set_frequency"
+      ],
+      "4": [
+        "ai1_raw",
+        "hdi_pulse_frequency",
+        "pid_feedback",
+        "pid_setpoint",
+        "plc_step",
+        "remaining_run_time"
+      ]
+    },
+    "помещение": {
+      "1": [
+        "grv_tunnel",
+        "temp_target"
+      ]
+    },
+    "Коровник1": {
+      "1": [
+        "co2",
+        "damper",
+        "day_counter",
+        "digital_outputs_1",
+        "digital_outputs_2",
+        "digital_outputs_3",
+        "grv_base",
+        "grv_tunnel",
+        "humidity",
+        "nh3",
+        "pressure",
+        "software_version",
+        "temp_inside",
+        "temp_target",
+        "temp_vent_activation",
+        "ventilation_level",
+        "ventilation_scheme",
+        "ventilation_target"
+      ],
+      "3": [
+        "software_version"
+      ],
+      "4": [
+        "software_version"
+      ]
+    },
+    "Коровник2": {
+      "2": [
+        "set_frequency"
+      ],
+      "5": [
+        "software_version"
+      ]
+    }
+  },
+  "auto_refresh": {
+    "enabled": false,
+    "interval": 60
+  }
+}

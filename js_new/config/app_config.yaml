@@ -1,0 +1,47 @@
+system:
+  environment: development
+  log_level: debug
+  offline_mode: false
+  startup_timeout: 30
+  shutdown_timeout: 10
+
+rs485:
+  port: /dev/ttyUSB0
+  baudrate: 9600
+  timeout: 5000
+  slave_id: 1
+  window_duration: 5
+  cooldown_duration: 10
+
+modbus_tcp:
+  port: 5023
+  timeout: 3000
+  max_connections: 10
+
+database:
+  file: storage/edge_data.db
+  commands_db: data/edge_commands.db
+  journal_mode: WAL
+  synchronous: NORMAL
+  timeout: 5000
+
+polling:
+  timeout: 30000
+  max_retries: 3
+  backoff_factor: 10
+  backoff_max: 60
+  default_intervals:
+    KUB-1063: 20
+    KUB-1112: 20
+    VFD-INVERTER: 20
+    ESQ-230: 20
+    VARIABLE-SYSTEM: 30
+
+services:
+  telegram_enabled: false
+  websocket_enabled: true
+  mqtt_enabled: false
+  gateway_enabled: false
+  dashboard_enabled: false
+  dashboard_port: 8501
+  websocket_port: 8000

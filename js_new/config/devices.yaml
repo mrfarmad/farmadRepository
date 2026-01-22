@@ -1,0 +1,33 @@
+devices:
+  - device_id: 1
+    device_type: KUB-1063
+    slave_id: 2
+    name: "Poultry Climate Controller #1"
+    description: "Main climate control system for Barn 1"
+    enabled: true
+    location: "North Farm"
+    room: "Barn 1"
+    poll_interval: 15
+    priority: CRITICAL
+
+  # - device_id: 2
+  #   device_type: KUB-1063
+  #   slave_id: 3
+  #   name: "Poultry Climate Controller #2"
+  #   description: "Climate control for Barn 2"
+  #   enabled: true
+  #   location: "North Farm"
+  #   room: "Barn 2"
+  #   poll_interval: 20
+  #   priority: HIGH
+
+  # - device_id: 3
+  #   device_type: VFD-INVERTER
+  #   slave_id: 10
+  #   name: "Exhaust Fan VFD"
+  #   description: "Variable speed exhaust fan"
+  #   enabled: true
+  #   location: "North Farm"
+  #   room: "Barn 1"
+  #   poll_interval: 30
+  #   priority: NORMAL
