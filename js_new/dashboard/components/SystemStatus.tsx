@@ -58,8 +58,8 @@ export default function SystemStatus({
             />
           </div>
           <div>
-            <p className="text-sm font-medium text-gray-900">WebSocket</p>
-            <p className="text-xs text-gray-500">
+            <p className="text-sm font-medium text-slate-100">WebSocket</p>
+            <p className="text-xs text-slate-400">
               {isConnected ? 'Connected' : 'Disconnected'}
             </p>
           </div>
@@ -75,8 +75,8 @@ export default function SystemStatus({
             />
           </div>
           <div>
-            <p className="text-sm font-medium text-gray-900">System</p>
-            <p className="text-xs text-gray-500">
+            <p className="text-sm font-medium text-slate-100">System</p>
+            <p className="text-xs text-slate-400">
               {systemHealthy ? 'Healthy' : 'Unhealthy'}
             </p>
           </div>
@@ -100,8 +100,8 @@ export default function SystemStatus({
             </svg>
           </div>
           <div>
-            <p className="text-sm font-medium text-gray-900">Devices</p>
-            <p className="text-xs text-gray-500">{deviceCount} active</p>
+            <p className="text-sm font-medium text-slate-100">Devices</p>
+            <p className="text-xs text-slate-400">{deviceCount} active</p>
           </div>
         </div>
 
@@ -124,8 +124,8 @@ export default function SystemStatus({
               </svg>
             </div>
             <div>
-              <p className="text-sm font-medium text-gray-900">CPU</p>
-              <p className="text-xs text-gray-500">
+              <p className="text-sm font-medium text-slate-100">CPU</p>
+              <p className="text-xs text-slate-400">
                 {metricsData.cpu_usage.toFixed(1)}%
               </p>
             </div>

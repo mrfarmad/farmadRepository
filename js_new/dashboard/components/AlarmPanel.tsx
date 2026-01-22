@@ -21,7 +21,7 @@ export default function AlarmPanel({ alarms, warnings }: AlarmPanelProps) {
   if (totalCount === 0) return null;
 
   return (
-    <div className="card border-l-4 border-red-500">
+    <div className="card border-l-4 border-red-500/80">
       {/* Header */}
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center space-x-3">
@@ -41,17 +41,17 @@ export default function AlarmPanel({ alarms, warnings }: AlarmPanelProps) {
             </svg>
           </div>
           <div>
-            <h3 className="text-lg font-semibold text-gray-900">
+            <h3 className="text-lg font-semibold text-slate-100">
               Active Alerts
             </h3>
-            <p className="text-sm text-gray-500">
+            <p className="text-sm text-slate-400">
               {alarms.length} alarms, {warnings.length} warnings
             </p>
           </div>
         </div>
         <button
           onClick={() => setIsExpanded(!isExpanded)}
-          className="text-gray-400 hover:text-gray-600"
+          className="text-slate-400 hover:text-slate-200"
         >
           <svg
             className={`h-5 w-5 transform transition-transform ${
@@ -77,34 +77,34 @@ export default function AlarmPanel({ alarms, warnings }: AlarmPanelProps) {
           {/* Alarms */}
           {alarms.length > 0 && (
             <div>
-              <h4 className="text-sm font-medium text-red-600 mb-2">
+              <h4 className="text-sm font-medium text-red-300 mb-2">
                 Critical Alarms:
               </h4>
               <div className="space-y-2">
                 {alarms.slice(0, 10).map((alarm: any, idx) => (
                   <div
                     key={idx}
-                    className="bg-red-50 border border-red-200 rounded p-3"
+                    className="bg-red-500/10 border border-red-500/30 rounded p-3"
                   >
                     <div className="flex items-start justify-between">
                       <div className="flex-1">
                         <div className="flex items-center space-x-2 mb-1">
-                          <span className="font-medium text-red-900">
+                          <span className="font-medium text-red-200">
                             Device #{alarm.device_id}
                           </span>
-                          <span className="text-xs text-red-600">
+                          <span className="text-xs text-red-300">
                             {alarm.device_type}
                           </span>
                         </div>
                         <ul className="space-y-1">
                           {alarm.messages?.map((msg: string, i: number) => (
-                            <li key={i} className="text-sm text-red-700">
+                            <li key={i} className="text-sm text-red-200">
                               • {msg}
                             </li>
                           ))}
                         </ul>
                       </div>
-                      <span className="text-xs text-red-500 ml-4">
+                      <span className="text-xs text-red-300 ml-4">
                         {formatDistanceToNow(new Date(alarm.timestamp), {
                           addSuffix: true,
                         })}
@@ -119,34 +119,34 @@ export default function AlarmPanel({ alarms, warnings }: AlarmPanelProps) {
           {/* Warnings */}
           {warnings.length > 0 && (
             <div>
-              <h4 className="text-sm font-medium text-yellow-600 mb-2">
+              <h4 className="text-sm font-medium text-amber-300 mb-2">
                 Warnings:
               </h4>
               <div className="space-y-2">
                 {warnings.slice(0, 10).map((warning: any, idx) => (
                   <div
                     key={idx}
-                    className="bg-yellow-50 border border-yellow-200 rounded p-3"
+                    className="bg-amber-500/10 border border-amber-500/30 rounded p-3"
                   >
                     <div className="flex items-start justify-between">
                       <div className="flex-1">
                         <div className="flex items-center space-x-2 mb-1">
-                          <span className="font-medium text-yellow-900">
+                          <span className="font-medium text-amber-200">
                             Device #{warning.device_id}
                           </span>
-                          <span className="text-xs text-yellow-600">
+                          <span className="text-xs text-amber-300">
                             {warning.device_type}
                           </span>
                         </div>
                         <ul className="space-y-1">
                           {warning.messages?.map((msg: string, i: number) => (
-                            <li key={i} className="text-sm text-yellow-700">
+                            <li key={i} className="text-sm text-amber-200">
                               • {msg}
                             </li>
                           ))}
                         </ul>
                       </div>
-                      <span className="text-xs text-yellow-500 ml-4">
+                      <span className="text-xs text-amber-300 ml-4">
                         {formatDistanceToNow(new Date(warning.timestamp), {
                           addSuffix: true,
                         })}

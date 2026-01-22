@@ -101,7 +101,7 @@ export default function ControlPanel({ deviceId, deviceType }: ControlPanelProps
   const quickActions = getQuickActions();
 
   return (
-    <div className="mt-4 pt-4 border-t border-gray-200">
+    <div className="mt-4 pt-4 border-t border-slate-700/70">
       <button
         onClick={() => setIsOpen(!isOpen)}
         className="btn-secondary w-full"
@@ -123,11 +123,11 @@ export default function ControlPanel({ deviceId, deviceType }: ControlPanelProps
       </button>
 
       {isOpen && (
-        <div className="mt-4 p-4 bg-gray-50 rounded-lg">
+        <div className="mt-4 p-4 bg-slate-900/70 rounded-lg border border-slate-700/70">
           {/* Quick Actions */}
           {quickActions.length > 0 && (
             <div className="mb-4">
-              <h4 className="text-sm font-medium text-gray-700 mb-2">
+              <h4 className="text-sm font-medium text-slate-200 mb-2">
                 Quick Actions:
               </h4>
               <div className="space-y-2">
@@ -154,7 +154,7 @@ export default function ControlPanel({ deviceId, deviceType }: ControlPanelProps
           {/* Custom Command Form */}
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block text-sm font-medium text-slate-300 mb-1">
                 Register Address (hex)
               </label>
               <input
@@ -164,14 +164,14 @@ export default function ControlPanel({ deviceId, deviceType }: ControlPanelProps
                   setForm({ ...form, register_address: e.target.value })
                 }
                 placeholder="0x0100"
-                className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+                className="w-full px-3 py-2 border border-slate-700 rounded-md bg-slate-900/70 text-slate-100 shadow-sm focus:outline-none focus:ring-indigo-400/40 focus:border-indigo-400"
                 required
                 disabled={isLoading}
               />
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block text-sm font-medium text-slate-300 mb-1">
                 Value
               </label>
               <input
@@ -179,14 +179,14 @@ export default function ControlPanel({ deviceId, deviceType }: ControlPanelProps
                 value={form.value}
                 onChange={(e) => setForm({ ...form, value: e.target.value })}
                 placeholder="0"
-                className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+                className="w-full px-3 py-2 border border-slate-700 rounded-md bg-slate-900/70 text-slate-100 shadow-sm focus:outline-none focus:ring-indigo-400/40 focus:border-indigo-400"
                 required
                 disabled={isLoading}
               />
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block text-sm font-medium text-slate-300 mb-1">
                 Priority
               </label>
               <select
@@ -197,7 +197,7 @@ export default function ControlPanel({ deviceId, deviceType }: ControlPanelProps
                     priority: e.target.value as CommandForm['priority'],
                   })
                 }
-                className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+                className="w-full px-3 py-2 border border-slate-700 rounded-md bg-slate-900/70 text-slate-100 shadow-sm focus:outline-none focus:ring-indigo-400/40 focus:border-indigo-400"
                 disabled={isLoading}
               >
                 <option value="LOW">Low</option>
@@ -211,8 +211,8 @@ export default function ControlPanel({ deviceId, deviceType }: ControlPanelProps
               <div
                 className={`p-3 rounded-md ${
                   message.type === 'success'
-                    ? 'bg-green-50 text-green-800'
-                    : 'bg-red-50 text-red-800'
+                    ? 'bg-emerald-500/10 text-emerald-300 border border-emerald-500/30'
+                    : 'bg-red-500/10 text-red-300 border border-red-500/30'
                 }`}
               >
                 <p className="text-sm">{message.text}</p>

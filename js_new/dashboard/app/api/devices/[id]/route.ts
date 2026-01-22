@@ -1,38 +1,43 @@
 /**
  * API Route: /api/devices/[id]
- * Fetches specific device data and history
+ * Fetches specific device configuration
  */
 
 import { NextResponse } from 'next/server';
+import fs from 'fs/promises';
+import path from 'path';
+import yaml from 'js-yaml';
 
-const HEALTH_API_BASE = process.env.HEALTH_API_URL || 'http://localhost:8090';
+const CONFIG_PATH = path.join(process.cwd(), '..', 'config', 'devices.yaml');
 
 export async function GET(
   request: Request,
   { params }: { params: { id: string } }
 ) {
   try {
-    const deviceId = params.id;
-
-    // In production, this would fetch from the database via Health API
-    // For now, return a structured response
-    const response = await fetch(`${HEALTH_API_BASE}/health`, {
-      cache: 'no-store',
-    });
-
-    if (!response.ok) {
-      throw new Error(`Health API returned ${response.status}`);
+    const deviceId = Number(params.id);
+    if (Number.isNaN(deviceId)) {
+      return NextResponse.json(
+        { error: 'Invalid device id' },
+        { status: 400 }
+      );
     }
 
-    const healthData = await response.json();
+    const fileContents = await fs.readFile(CONFIG_PATH, 'utf8');
+    const parsed = yaml.load(fileContents) as { devices?: Array<Record<string, unknown>> };
+    const devices = parsed?.devices ?? [];
+    const device = devices.find(
+      (item) => Number(item.device_id) === deviceId
+    );
 
-    // Return device-specific data structure
-    return NextResponse.json({
-      device_id: parseInt(deviceId),
-      status: healthData.status,
-      timestamp: healthData.timestamp,
-      // Additional device data would come from database queries
-    });
+    if (!device) {
+      return NextResponse.json(
+        { error: 'Device not found' },
+        { status: 404 }
+      );
+    }
+
+    return NextResponse.json({ device });
   } catch (error) {
     console.error(`Failed to fetch device ${params.id}:`, error);
     return NextResponse.json(
